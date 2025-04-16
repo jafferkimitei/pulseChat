@@ -1,6 +1,6 @@
 import Message from '../models/Message.js'
 
-export const socketHandler = (io) => {
+export const handleSocket = (io) => {
   io.on('connection', (socket) => {
     console.log('🟢 Connected:', socket.id)
 
@@ -12,7 +12,6 @@ export const socketHandler = (io) => {
     socket.on('chatMessage', async ({ room, sender, content }) => {
       const message = await Message.create({ room, sender, content })
 
-      // Broadcast to everyone in the room
       io.to(room).emit('message', {
         sender,
         content,
