@@ -36,6 +36,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 
 // WebSocket logic
+// Socket io
 io.on('connection', socket => {
   console.log('A user connected 🟢:', socket.id)
   socket.on('joinRoom', room => {
