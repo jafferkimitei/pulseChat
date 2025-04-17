@@ -38,6 +38,31 @@ mongoose.connect(process.env.MONGODB_URI)
 // WebSocket logic
 io.on('connection', socket => {
   console.log('A user connected 🟢:', socket.id)
+  socket.on('joinRoom', room => {
+    socket.join(room)
+    console.log(`User ${socket.id} joined room ${room} 📥`)
+  })
+
+  socket.on('leaveRoom', room => {
+    socket.leave(room)
+    console.log(`User ${socket.id} left room ${room} 📤`
+    )
+  })
+  socket.on('typing', ({ room, sender }) =>
+    io.to(room).emit(
+      'typing',
+      { sender }
+    )
+  )
+  socket.on('stopTyping', ({ room, sender }) =>
+    io.to(room).emit(
+      'stopTyping',
+      { sender }
+    )
+  )
+  socket.on('chatMessage', ({ room, sender, content }) => {
+    io.to(room).emit('message', { sender, content })
+  })
   handleSocket(io)
   socket.on('disconnect', () => {
     console.log('User disconnected 🔴:', socket.id)
