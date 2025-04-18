@@ -21,8 +21,11 @@ const io = new Server(server, {
   }
 })
 
-
-app.use(cors())
+const corsOptions = {
+  origin: 'http://localhost:5173', // Replace with your frontend's URL
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+};
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use('/api/chats', chatRoutes)
 app.use('/api/auth', authRoutes)
