@@ -1,15 +1,6 @@
-import Message from '../models/Message.js'
+import Message from '../models/MessageModel.js'
 
-// Get all messages for a specific room
-export const getMessagesByRoom = async (req, res) => {
-  const { room } = req.params
-  try {
-    const messages = await Message.find({ room }).sort({ createdAt: 1 })
-    res.status(200).json(messages)
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch messages' })
-  }
-}
+
 
 // Post a new message to a room
 export const postMessage = async (req, res) => {
@@ -26,3 +17,29 @@ export const postMessage = async (req, res) => {
     res.status(500).json({ error: 'Failed to send message' })
   }
 }
+
+export const getMessagesByRoom = async (req, res) => {
+  try {
+    const msgs = await Message.find({ roomId: req.params.roomId })
+      .sort('createdAt')
+      .populate({
+        path: 'user',
+        select: 'name avatar',
+        populate: { path: 'avatar', select: 'url' }
+      });
+
+    // map to a simpler shape
+    const formatted = msgs.map(m => ({
+      _id:       m._id,
+      text:      m.text,
+      createdAt: m.createdAt,
+      username:  m.user.name,
+      avatarUrl: m.user.avatar?.url
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+};

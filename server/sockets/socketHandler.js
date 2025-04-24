@@ -1,4 +1,4 @@
-import Message from '../models/Message.js'
+import Message from '../models/MessageModel.js'
 
 export const handleSocket = (io) => {
   io.on('connection', (socket) => {

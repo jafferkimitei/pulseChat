@@ -27,7 +27,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions))
 app.use(express.json())
-app.use('/api/chats', chatRoutes)
+app.use('/api/chat', chatRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/avatars', AvatarRoutes)

@@ -3,6 +3,10 @@ import dotenv from "dotenv";
 import User from "../models/userModel.js";
 import Room from "../models/roomModel.js";
 import Avatar from "../models/avatarModel.js";
+import Message from '../models/MessageModel.js';
+
+const rooms = await Room.find();
+const users = await User.find();
 
 dotenv.config();
 
@@ -72,6 +76,12 @@ const seedData = async () => {
         name: "Witty Fox",
         url: "https://api.dicebear.com/7.x/avataaars/svg?seed=WittyFox",
       },
+    ]);
+
+    await Message.insertMany([
+      { text: 'Hello from Mike!', user: users[0]._id, roomId: rooms[0]._id },
+      { text: 'Hey Mike!',      user: users[1]._id, roomId: rooms[0]._id },
+      
     ]);
 
     console.log("Seeding complete!");
